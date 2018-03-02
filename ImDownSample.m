@@ -1,7 +1,7 @@
 %MATLAB Implementation of the Image Downsampling Algorithm
 
 %Author : Ashwin de Silva
-%Last Updated : 2018 Feb 28
+%Last Updated : 2018 Mar 2
 
 clear all;
 close all;
@@ -24,28 +24,30 @@ M = reshape(im',[1,512*512]);
 
 %Image downsampling algorithm
 
-counter = 514;
-address = 1;
-while (counter < 510*510)
-    if mod(counter,1024) == 0
-        counter = counter + 512 + 2;
-        continue;
+counter1 = 514;
+counter2 = 0;
+counter3 = 1;
+while (counter1 < 511*511)
+    if counter2 - 512 == 0
+        counter1 = counter1 + 512 + 2;
+        counter2 = 0;
     end
     G = zeros(1,9);
-    G(1) = M(counter - 512 - 1)*1;
-    G(2) = M(counter - 512)*2; 
-    G(3) = M(counter - 512 + 1)*1;
-    G(4) = M(counter - 1)*2;
-    G(5) = M(counter)*3;
-    G(6) = M(counter + 1)*2;
-    G(7) = M(counter + 512 - 1)*1;
-    G(8) = M(counter + 512)*2;
-    G(9) = M(counter + 512 + 1)*1;
+    G(1) = M(counter1 - 512 - 1)*1;
+    G(2) = M(counter1 - 512)*2; 
+    G(3) = M(counter1 - 512 + 1)*1;
+    G(4) = M(counter1 - 1)*2;
+    G(5) = M(counter1)*4;
+    G(6) = M(counter1 + 1)*2;
+    G(7) = M(counter1 + 512 - 1)*1;
+    G(8) = M(counter1 + 512)*2;
+    G(9) = M(counter1 + 512 + 1)*1;
     
-    avg = sum(G)/1;
-    M(address) = avg;
-    address = address + 1;
-    counter = counter + 2;
+    avg = sum(G)/16;
+    M(counter3) = avg;
+    counter3 = counter3 + 1;
+    counter2 = counter2 + 2;
+    counter1 = counter1 + 2;
 end
 
 %Extract the image from M-array 
