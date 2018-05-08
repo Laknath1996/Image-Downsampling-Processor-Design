@@ -146,10 +146,10 @@ ROM[82] = LDAC; //AC <— DRAM[MAR]
 ROM[83] = ADDT; //AC <— AC + T 
 ROM[84] = MVACT; //T <— AC 
 
-ROM[85] = MVT; //AC <— C3 
-ROM[86] = DIV; //MAR <— AC 
-ROM[87] = MVC3;//AC <— T 
-ROM[88] = MVACMAR; //AC <— AC >> 4 
+ROM[85] = MVT; //AC <— T 
+ROM[86] = DIV; //AC <— AC >> 4 
+ROM[87] = MVC3;//AC <— C3 
+ROM[88] = MVACMAR; //MAR <— AC 
 ROM[89] = STAC; //DRAM[MAR] <— AC
 
 ROM[90] = MVC3; //AC <— C3 
