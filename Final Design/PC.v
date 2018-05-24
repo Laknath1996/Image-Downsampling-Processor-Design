@@ -30,7 +30,8 @@ end
 
 always@(posedge enable)
 	start <= 1'b1;
-
+	//make ins_address zero 
+	
 always@(negedge clk)
 	begin
 		if (start) begin
