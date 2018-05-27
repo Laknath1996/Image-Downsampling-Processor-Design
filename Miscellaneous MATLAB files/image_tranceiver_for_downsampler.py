@@ -3,13 +3,18 @@ import serial
 import time
 import scipy.io as sio
 import cv2
-
+ 
 print('Welcome to FPGA based Image Downsampler')
 
 #read the image pixel data
 
-mat = sio.loadmat('image.mat')
-image = mat['A']
+##mat = sio.loadmat('image.mat')
+##image = mat['A']
+
+#read image from the source
+
+image = cv2.imread('Girl1.bmp',0)
+image = cv2.resize(image,(256,256))
 
 #prepare the image for transmission
 
@@ -90,8 +95,10 @@ cv2.imshow('Downsampled Image',result)
 #downsample the image using python script
 
 print('displaying the simulated downsampled image')
-mat = sio.loadmat('image.mat')
-im = mat["A"]
+#mat = sio.loadmat('image.mat')
+#im = mat["A"]
+im = cv2.imread('Girl1.bmp',0)
+im = cv2.resize(image,(256,256))
 im.astype(int)
 im = np.reshape(im,65536)
 image = np.zeros(65536)
@@ -137,6 +144,14 @@ simulated_im = np.array(simulated_im,dtype = np.uint8)
 
 cv2.imshow('Simulated Image',simulated_im)
 
+#compute the downsampling using the opencv function
+
+print('displaying the opencv downsampled image')
+image = cv2.imread('Girl1.bmp',0)
+image = cv2.resize(image,(256,256))
+cv_ds_im = cv2.resize(image,(127,127))
+cv2.imshow('opencv downsampled Image',cv_ds_im)
+
 #Error Analysis - Absolute Error and SSD
 
 print('Analyzing the Error..')
@@ -145,24 +160,34 @@ print('Analyzing the Error..')
 
 result = np.reshape(result,127*127)
 simulated_im = np.reshape(simulated_im, 127*127)
+cv_ds_im  = np.reshape(cv_ds_im, 127*127)
 diff = result - simulated_im
-
+diff1 = result - cv_ds_im
 abs_error = sum(np.absolute(diff))
-
-print('Absolute Error : ',abs_error)
+abs_error1 = sum(np.absolute(diff1))
 
 #### Sum of Square Differences ####
 
 sq_diff = np.power(diff,2)
 SSD = sum(sq_diff)
+sq_diff1 = np.power(diff1,2)
+SSD1 = sum(sq_diff1)
 
 non_zero_count = np.count_nonzero(diff)
 max_error = max(np.absolute(diff))
+non_zero_count1 = np.count_nonzero(diff1)
+max_error1 = max(np.absolute(diff1))
 
-print('Sum of Square Difference : ',SSD)
+print('Absolute Error with simulated image : ',abs_error)
+print('Sum of Square Difference with simulated image : ',SSD)
+print('Non zero count with simulated image : ',non_zero_count)
+print('Maximum Error with simulated image : ',max_error)
 
-print('Non zero count : ',non_zero_count)
-print('Maximum Error : ',max_error)
+
+print('Absolute Error with opencv downsampled image : ',abs_error1)
+print('Sum of Square Difference with opencv downsampled image : ',SSD1)
+print('Non zero count with opencv downsampled image : ',non_zero_count1)
+print('Maximum Error with opencv downsampled image : ',max_error1)
 
 print('Error Analysis Complete')
 
